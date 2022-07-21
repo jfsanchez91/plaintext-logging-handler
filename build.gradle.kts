@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "net.jfsanchez.netty"
-version = "0.0.1-SNAPSHOT"
+version = "0.0.1-alpha2-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -27,13 +27,15 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-tasks.create("sourcesJar", Jar::class.java) {
+tasks.register("sourcesJar", Jar::class.java) {
+    group = "build"
     dependsOn(tasks.dokkaJavadoc)
     archiveClassifier.set("sources")
     from(sourceSets.main.get().allSource)
 }
 
-tasks.create("javadocJar", Jar::class.java) {
+tasks.register("javadocJar", Jar::class.java) {
+    group = "build"
     dependsOn(tasks.dokkaJavadoc)
     archiveClassifier.set("javadoc")
     from(tasks.dokkaJavadoc.get().outputDirectory)
@@ -45,6 +47,11 @@ tasks.build {
 
 tasks.publish {
     dependsOn(tasks.build)
+}
+
+artifacts {
+    add("archives", tasks.getByName("sourcesJar"))
+    add("archives", tasks.getByName("javadocJar"))
 }
 
 publishing {
@@ -95,11 +102,20 @@ publishing {
     }
     repositories {
         maven {
-            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+            url = if (version.toString().toUpperCase().endsWith("-SNAPSHOT")) {
+                uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+            } else {
+                uri("https://s01.oss.sonatype.org/content/repositories/releases/")
+            }
             credentials {
                 username = System.getenv("SONATYPE_USERNAME")
                 password = System.getenv("SONATYPE_PASSWORD")
             }
         }
     }
+}
+
+signing {
+    isRequired = true
+    sign(publishing.publications["maven"])
 }
