@@ -19,7 +19,7 @@ import net.jfsanchez.netty.handler.logging.provider.HeaderStatementProvider
 import net.jfsanchez.netty.handler.logging.provider.impl.DefaultBodyStatementProviderImpl
 import net.jfsanchez.netty.handler.logging.provider.impl.DefaultHeaderStatementProviderImpl
 
-open class PlainTextHttpLoggingHandler(
+open class PlainTextHttpClientLoggingHandler(
     private val headerStatementProvider: HeaderStatementProvider = DefaultHeaderStatementProviderImpl(),
     private val bodyStatementProvider: BodyStatementProvider = DefaultBodyStatementProviderImpl(),
     private val handler: LogStatementHandler = DefaultLogStatementHandlerImpl(),
