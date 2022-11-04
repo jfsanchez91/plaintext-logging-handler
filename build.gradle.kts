@@ -1,3 +1,4 @@
+import org.gradle.internal.impldep.org.bouncycastle.asn1.x509.X509ObjectIdentifiers.organization
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -8,7 +9,7 @@ plugins {
 }
 
 group = "net.jfsanchez.netty"
-version = "0.0.1-alpha2-SNAPSHOT"
+version = "1.0"
 
 repositories {
     mavenCentral()
